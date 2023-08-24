@@ -18,20 +18,20 @@ public abstract class AbstractBeanFactory implements BeanFactory {
 
 	private final List<String> beanDefinitionNames = new ArrayList<String>();
 
+	private final Map<String, Object> singletonObjects = new ConcurrentHashMap<>(256);
+
 	private List<BeanPostProcessor> beanPostProcessors = new ArrayList<BeanPostProcessor>();
 
 	@Override
 	public Object getBean(String name) throws Exception {
-		BeanDefinition beanDefinition = beanDefinitionMap.get(name);
-		if (beanDefinition == null) {
-			throw new IllegalArgumentException("No bean named " + name + " is defined");
+		Object bean = singletonObjects.get(name);
+		if (bean != null) {
+			return bean;
 		}
-		Object bean = beanDefinition.getBean();
-		if (bean == null) {
-			bean = doCreateBean(beanDefinition);
-            bean = initializeBean(bean, name);
-            beanDefinition.setBean(bean);
-		}
+		BeanDefinition beanDefinition = getBeanDefinition(name);
+		bean = doCreateBean(beanDefinition);
+		bean = initializeBean(bean, name);
+		singletonObjects.put(name, bean);
 		return bean;
 	}
 
@@ -73,6 +73,9 @@ public abstract class AbstractBeanFactory implements BeanFactory {
 	protected void applyPropertyValues(Object bean, BeanDefinition beanDefinition) throws Exception {
 
 	}
+
+	protected abstract BeanDefinition getBeanDefinition(String beanName);
+
 
 	public void addBeanPostProcessor(BeanPostProcessor beanPostProcessor) throws Exception {
 		this.beanPostProcessors.add(beanPostProcessor);

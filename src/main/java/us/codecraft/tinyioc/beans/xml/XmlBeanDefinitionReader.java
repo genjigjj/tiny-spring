@@ -8,6 +8,7 @@ import us.codecraft.tinyioc.BeanReference;
 import us.codecraft.tinyioc.beans.AbstractBeanDefinitionReader;
 import us.codecraft.tinyioc.beans.BeanDefinition;
 import us.codecraft.tinyioc.beans.PropertyValue;
+import us.codecraft.tinyioc.beans.factory.support.BeanDefinitionRegistry;
 import us.codecraft.tinyioc.beans.io.ResourceLoader;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -19,8 +20,8 @@ import java.io.InputStream;
  */
 public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 
-	public XmlBeanDefinitionReader(ResourceLoader resourceLoader) {
-		super(resourceLoader);
+	public XmlBeanDefinitionReader(BeanDefinitionRegistry registry) {
+		super(registry);
 	}
 
 	@Override
@@ -61,7 +62,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 		BeanDefinition beanDefinition = new BeanDefinition();
 		processProperty(ele, beanDefinition);
 		beanDefinition.setBeanClassName(className);
-		getRegistry().put(name, beanDefinition);
+		getRegistry().registerBeanDefinition(name, beanDefinition);
 	}
 
 	private void processProperty(Element ele, BeanDefinition beanDefinition) {
