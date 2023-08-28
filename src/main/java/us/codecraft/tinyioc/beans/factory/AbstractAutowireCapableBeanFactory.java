@@ -26,7 +26,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         Object bean = instantiateBean(beanName, mbd, args);
         Object exposedObject = bean;
         populateBean(beanName, mbd);
-        exposedObject = initializeBean(beanName, exposedObject, mbd);
+        exposedObject = initializeBean(exposedObject, beanName);
         return exposedObject;
     }
 
