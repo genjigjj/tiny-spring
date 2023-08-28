@@ -21,7 +21,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
     protected void registerBeanPostProcessors(ConfigurableListableBeanFactory beanFactory) throws Exception {
         String[] postProcessorNames = beanFactory.getBeanNamesForType(BeanPostProcessor.class);
         for (String postProcessorName : postProcessorNames) {
-            getBeanFactory().addBeanPostProcessor((BeanPostProcessor) getBean(postProcessorName));
+            beanFactory.addBeanPostProcessor((BeanPostProcessor) getBean(postProcessorName));
         }
     }
 

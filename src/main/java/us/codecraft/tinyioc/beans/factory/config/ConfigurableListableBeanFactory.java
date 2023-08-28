@@ -1,6 +1,7 @@
 package us.codecraft.tinyioc.beans.factory.config;
 
 import us.codecraft.tinyioc.beans.BeanDefinition;
+import us.codecraft.tinyioc.beans.BeanPostProcessor;
 
 public interface ConfigurableListableBeanFactory {
 
@@ -10,4 +11,5 @@ public interface ConfigurableListableBeanFactory {
 
     String[] getBeanNamesForType(Class<?> type);
 
+    void addBeanPostProcessor(BeanPostProcessor bean);
 }

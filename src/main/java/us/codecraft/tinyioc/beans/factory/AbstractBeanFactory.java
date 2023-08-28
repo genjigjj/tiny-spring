@@ -52,7 +52,7 @@ public abstract class AbstractBeanFactory implements BeanFactory {
 	protected abstract BeanDefinition getBeanDefinition(String beanName);
 
 
-	public void addBeanPostProcessor(BeanPostProcessor beanPostProcessor) throws Exception {
+	public void addBeanPostProcessor(BeanPostProcessor beanPostProcessor) {
 		this.beanPostProcessors.add(beanPostProcessor);
 	}
 
