@@ -1,10 +1,11 @@
 package us.codecraft.tinyioc.beans.factory;
 
+import com.sun.istack.internal.Nullable;
 import us.codecraft.tinyioc.beans.BeanDefinition;
 import us.codecraft.tinyioc.beans.BeanPostProcessor;
+import us.codecraft.tinyioc.beans.BeansException;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -14,65 +15,39 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public abstract class AbstractBeanFactory implements BeanFactory {
 
-	private Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<String, BeanDefinition>();
-
-	private final List<String> beanDefinitionNames = new ArrayList<String>();
+//	private Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<String, BeanDefinition>();
+//
+//	private final List<String> beanDefinitionNames = new ArrayList<String>();
 
 	private final Map<String, Object> singletonObjects = new ConcurrentHashMap<>(256);
 
 	private List<BeanPostProcessor> beanPostProcessors = new ArrayList<BeanPostProcessor>();
 
 	@Override
-	public Object getBean(String name) throws Exception {
+	public Object getBean(String name) throws BeansException {
+		return doGetBean(name, null, null);
+	}
+
+	protected <T> T doGetBean(final String name, @Nullable final Class<T> requiredType,
+							  @Nullable final Object[] args) throws BeansException {
 		Object bean = singletonObjects.get(name);
 		if (bean != null) {
-			return bean;
+			return (T) bean;
 		}
 		BeanDefinition beanDefinition = getBeanDefinition(name);
-		bean = doCreateBean(beanDefinition);
-		bean = initializeBean(bean, name);
+		bean = createBean(name, beanDefinition, args);
 		singletonObjects.put(name, bean);
-		return bean;
+		return (T) bean;
 	}
 
-	protected Object initializeBean(Object bean, String name) throws Exception {
-		for (BeanPostProcessor beanPostProcessor : beanPostProcessors) {
-			bean = beanPostProcessor.postProcessBeforeInitialization(bean, name);
-		}
+	protected abstract Object createBean(String beanName, BeanDefinition mbd, @Nullable Object[] args) throws BeansException;
 
-		// TODO:call initialize method
-		for (BeanPostProcessor beanPostProcessor : beanPostProcessors) {
-            bean = beanPostProcessor.postProcessAfterInitialization(bean, name);
-		}
-        return bean;
+
+	public List<BeanPostProcessor> getBeanPostProcessors() {
+		return this.beanPostProcessors;
 	}
 
-	protected Object createBeanInstance(BeanDefinition beanDefinition) throws Exception {
-		return beanDefinition.getBeanClass().newInstance();
-	}
 
-	public void registerBeanDefinition(String name, BeanDefinition beanDefinition) throws Exception {
-		beanDefinitionMap.put(name, beanDefinition);
-		beanDefinitionNames.add(name);
-	}
-
-	public void preInstantiateSingletons() throws Exception {
-		for (Iterator it = this.beanDefinitionNames.iterator(); it.hasNext();) {
-			String beanName = (String) it.next();
-			getBean(beanName);
-		}
-	}
-
-	protected Object doCreateBean(BeanDefinition beanDefinition) throws Exception {
-		Object bean = createBeanInstance(beanDefinition);
-		beanDefinition.setBean(bean);
-		applyPropertyValues(bean, beanDefinition);
-		return bean;
-	}
-
-	protected void applyPropertyValues(Object bean, BeanDefinition beanDefinition) throws Exception {
-
-	}
 
 	protected abstract BeanDefinition getBeanDefinition(String beanName);
 
@@ -81,14 +56,5 @@ public abstract class AbstractBeanFactory implements BeanFactory {
 		this.beanPostProcessors.add(beanPostProcessor);
 	}
 
-	public List getBeansForType(Class type) throws Exception {
-		List beans = new ArrayList<Object>();
-		for (String beanDefinitionName : beanDefinitionNames) {
-			if (type.isAssignableFrom(beanDefinitionMap.get(beanDefinitionName).getBeanClass())) {
-				beans.add(getBean(beanDefinitionName));
-			}
-		}
-		return beans;
-	}
 
 }

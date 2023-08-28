@@ -8,4 +8,6 @@ public interface ConfigurableListableBeanFactory {
 
     void preInstantiateSingletons();
 
+    String[] getBeanNamesForType(Class<?> type);
+
 }

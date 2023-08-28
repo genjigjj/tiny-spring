@@ -1,12 +1,9 @@
 package us.codecraft.tinyioc.context;
 
 import us.codecraft.tinyioc.beans.BeanPostProcessor;
-import us.codecraft.tinyioc.beans.factory.AbstractBeanFactory;
-import us.codecraft.tinyioc.beans.factory.support.AutowireCapableBeanFactory;
 import us.codecraft.tinyioc.beans.factory.DefaultListableBeanFactory;
+import us.codecraft.tinyioc.beans.factory.config.ConfigurableListableBeanFactory;
 import us.codecraft.tinyioc.beans.io.DefaultResourceLoader;
-
-import java.util.List;
 
 /**
  * @author yihua.huang@dianping.com
@@ -21,20 +18,20 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
         registerBeanPostProcessors(beanFactory);
         onRefresh();
     }
-    protected void registerBeanPostProcessors(AbstractBeanFactory beanFactory) throws Exception {
-        List beanPostProcessors = beanFactory.getBeansForType(BeanPostProcessor.class);
-        for (Object beanPostProcessor : beanPostProcessors) {
-            beanFactory.addBeanPostProcessor((BeanPostProcessor) beanPostProcessor);
+    protected void registerBeanPostProcessors(ConfigurableListableBeanFactory beanFactory) throws Exception {
+        String[] postProcessorNames = beanFactory.getBeanNamesForType(BeanPostProcessor.class);
+        for (String postProcessorName : postProcessorNames) {
+            getBeanFactory().addBeanPostProcessor((BeanPostProcessor) getBean(postProcessorName));
         }
     }
 
     protected void onRefresh() throws Exception {
-        beanFactory.preInstantiateSingletons();
+        getBeanFactory().preInstantiateSingletons();
     }
 
     @Override
     public Object getBean(String name) throws Exception {
-        return beanFactory.getBean(name);
+        return getBeanFactory().getBean(name);
     }
 
     protected DefaultListableBeanFactory obtainFreshBeanFactory() throws Exception {
@@ -44,5 +41,5 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
 
     protected abstract void refreshBeanFactory() throws Exception;
 
-    public abstract AutowireCapableBeanFactory getBeanFactory();
+    public abstract DefaultListableBeanFactory getBeanFactory();
 }
