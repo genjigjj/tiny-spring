@@ -5,22 +5,16 @@ import us.codecraft.tinyioc.beans.BeanDefinition;
 import us.codecraft.tinyioc.beans.BeanPostProcessor;
 import us.codecraft.tinyioc.beans.BeansException;
 import us.codecraft.tinyioc.beans.factory.config.ConfigurableBeanFactory;
+import us.codecraft.tinyioc.beans.factory.support.DefaultSingletonBeanRegistry;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author yihua.huang@dianping.com
  */
-public abstract class AbstractBeanFactory implements ConfigurableBeanFactory {
+public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry implements ConfigurableBeanFactory {
 
-//	private Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<String, BeanDefinition>();
-//
-//	private final List<String> beanDefinitionNames = new ArrayList<String>();
-
-	private final Map<String, Object> singletonObjects = new ConcurrentHashMap<>(256);
 
 	private List<BeanPostProcessor> beanPostProcessors = new ArrayList<BeanPostProcessor>();
 
@@ -31,13 +25,22 @@ public abstract class AbstractBeanFactory implements ConfigurableBeanFactory {
 
 	protected <T> T doGetBean(final String name, @Nullable final Class<T> requiredType,
 							  @Nullable final Object[] args) throws BeansException {
-		Object bean = singletonObjects.get(name);
-		if (bean != null) {
-			return (T) bean;
+		Object bean;
+		Object sharedInstance = getSingleton(name);
+
+		if (sharedInstance != null && args == null) {
+			bean = sharedInstance;
+		} else {
+			BeanDefinition beanDefinition = getBeanDefinition(name);
+			if (beanDefinition.isSingleton()) {
+				sharedInstance = getSingleton(name, () -> createBean(name, beanDefinition, args));
+				bean = sharedInstance;
+			} else if (beanDefinition.isPrototype()) {
+				bean = createBean(name, beanDefinition, args);
+			} else {
+				throw new BeansException("doGetBean error");
+			}
 		}
-		BeanDefinition beanDefinition = getBeanDefinition(name);
-		bean = createBean(name, beanDefinition, args);
-		singletonObjects.put(name, bean);
 		return (T) bean;
 	}
 

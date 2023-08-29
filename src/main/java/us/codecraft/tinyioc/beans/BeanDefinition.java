@@ -7,6 +7,13 @@ package us.codecraft.tinyioc.beans;
  */
 public class BeanDefinition {
 
+	private static final String SCOPE_SINGLETON = "singleton";
+
+	private static final String SCOPE_DEFAULT = "";
+	private static final String SCOPE_PROTOTYPE = "prototype";
+
+	private String scope = SCOPE_DEFAULT;
+
 	private Class beanClass;
 
 	private String beanClassName;
@@ -43,5 +50,13 @@ public class BeanDefinition {
 
 	public void setPropertyValues(PropertyValues propertyValues) {
 		this.propertyValues = propertyValues;
+	}
+
+	public boolean isSingleton() {
+		return SCOPE_SINGLETON.equals(this.scope) || SCOPE_DEFAULT.equals(this.scope);
+	}
+
+	public boolean isPrototype() {
+		return SCOPE_PROTOTYPE.equals(this.scope);
 	}
 }

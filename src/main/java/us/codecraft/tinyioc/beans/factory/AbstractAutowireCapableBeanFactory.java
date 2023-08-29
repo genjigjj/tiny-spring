@@ -16,6 +16,8 @@ import java.lang.reflect.Method;
  */
 public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFactory implements AutowireCapableBeanFactory {
 
+    private boolean allowCircularReferences = true;
+
     @Override
     protected Object createBean(String beanName, BeanDefinition mbd, Object[] args) throws BeansException {
         Object beanInstance = doCreateBean(beanName, mbd, args);
@@ -24,9 +26,27 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
     protected Object doCreateBean(String beanName, BeanDefinition mbd, Object[] args) throws BeansException {
         Object bean = instantiateBean(beanName, mbd, args);
+        boolean earlySingletonExposure = (mbd.isSingleton() && this.allowCircularReferences &&
+                isSingletonCurrentlyInCreation(beanName));
+        if (earlySingletonExposure) {
+            addSingletonFactory(beanName, () -> getEarlyBeanReference(beanName, mbd, bean));
+        }
         Object exposedObject = bean;
         populateBean(beanName, mbd, exposedObject);
         exposedObject = initializeBean(exposedObject, beanName);
+        if (earlySingletonExposure) {
+            Object earlySingletonReference = getSingleton(beanName, false);
+            if (earlySingletonReference != null) {
+                if (exposedObject == bean) {
+                    exposedObject = earlySingletonReference;
+                }
+            }
+        }
+        return exposedObject;
+    }
+
+    private Object getEarlyBeanReference(String beanName, BeanDefinition mbd, Object bean) {
+        Object exposedObject = bean;
         return exposedObject;
     }
 
