@@ -1,7 +1,8 @@
 package us.codecraft.tinyioc.context;
 
-import us.codecraft.tinyioc.beans.factory.AbstractBeanFactory;
+import us.codecraft.tinyioc.beans.BeansException;
 import us.codecraft.tinyioc.beans.factory.DefaultListableBeanFactory;
+import us.codecraft.tinyioc.beans.factory.config.ConfigurableListableBeanFactory;
 
 public abstract class AbstractRefreshableApplicationContext extends AbstractApplicationContext{
 
@@ -10,20 +11,19 @@ public abstract class AbstractRefreshableApplicationContext extends AbstractAppl
     protected abstract void loadBeanDefinitions(DefaultListableBeanFactory beanFactory) throws Exception;
 
     @Override
-    protected void refreshBeanFactory() throws Exception {
-        DefaultListableBeanFactory beanFactory = createBeanFactory();
-        loadBeanDefinitions(beanFactory);
-        this.beanFactory = beanFactory;
+    protected void refreshBeanFactory() throws BeansException{
+        try {
+            DefaultListableBeanFactory beanFactory = createBeanFactory();
+            loadBeanDefinitions(beanFactory);
+            this.beanFactory = beanFactory;
+        } catch (Exception e) {
+            throw new BeansException("refreshBeanFactory error", e);
+        }
     }
 
     @Override
-    public void close() {
-
-    }
-
-    @Override
-    public DefaultListableBeanFactory getBeanFactory() {
-        return null;
+    public ConfigurableListableBeanFactory getBeanFactory() {
+        return this.beanFactory;
     }
 
     protected DefaultListableBeanFactory createBeanFactory() {

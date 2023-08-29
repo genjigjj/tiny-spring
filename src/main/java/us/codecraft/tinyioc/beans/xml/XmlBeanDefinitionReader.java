@@ -9,7 +9,6 @@ import us.codecraft.tinyioc.beans.AbstractBeanDefinitionReader;
 import us.codecraft.tinyioc.beans.BeanDefinition;
 import us.codecraft.tinyioc.beans.PropertyValue;
 import us.codecraft.tinyioc.beans.factory.support.BeanDefinitionRegistry;
-import us.codecraft.tinyioc.beans.io.ResourceLoader;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;

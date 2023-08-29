@@ -7,8 +7,6 @@ package us.codecraft.tinyioc.beans;
  */
 public class BeanDefinition {
 
-	private Object bean;
-
 	private Class beanClass;
 
 	private String beanClassName;
@@ -16,10 +14,6 @@ public class BeanDefinition {
 	private PropertyValues propertyValues = new PropertyValues();
 
 	public BeanDefinition() {
-	}
-
-	public void setBean(Object bean) {
-		this.bean = bean;
 	}
 
 	public Class getBeanClass() {
@@ -41,10 +35,6 @@ public class BeanDefinition {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-	}
-
-	public Object getBean() {
-		return bean;
 	}
 
 	public PropertyValues getPropertyValues() {

@@ -1,6 +1,7 @@
 package us.codecraft.tinyioc.beans.factory;
 
 import us.codecraft.tinyioc.beans.BeanDefinition;
+import us.codecraft.tinyioc.beans.BeansException;
 import us.codecraft.tinyioc.beans.factory.config.ConfigurableListableBeanFactory;
 import us.codecraft.tinyioc.beans.factory.support.BeanDefinitionRegistry;
 
@@ -25,7 +26,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
     public BeanDefinition getBeanDefinition(String beanName) {
         BeanDefinition beanDefinition = beanDefinitionMap.get(beanName);
         if (beanDefinition == null) {
-            throw new IllegalArgumentException("No bean named " + beanName + " is defined");
+            throw new BeansException("No bean named " + beanName + " is defined");
         }
         return beanDefinition;
     }
@@ -43,7 +44,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
     }
 
     private String[] doGetBeanNamesForType(Class<?> type) {
-        List<String> beans = new ArrayList<String>();
+        List<String> beans = new ArrayList<>();
         for (String beanDefinitionName : beanDefinitionNames) {
             if (type.isAssignableFrom(beanDefinitionMap.get(beanDefinitionName).getBeanClass())) {
                 beans.add(beanDefinitionName);

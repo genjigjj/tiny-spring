@@ -4,6 +4,7 @@ import com.sun.istack.internal.Nullable;
 import us.codecraft.tinyioc.beans.BeanDefinition;
 import us.codecraft.tinyioc.beans.BeanPostProcessor;
 import us.codecraft.tinyioc.beans.BeansException;
+import us.codecraft.tinyioc.beans.factory.config.ConfigurableBeanFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @author yihua.huang@dianping.com
  */
-public abstract class AbstractBeanFactory implements BeanFactory {
+public abstract class AbstractBeanFactory implements ConfigurableBeanFactory {
 
 //	private Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<String, BeanDefinition>();
 //

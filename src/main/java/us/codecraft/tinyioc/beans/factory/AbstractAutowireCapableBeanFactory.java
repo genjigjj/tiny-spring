@@ -25,7 +25,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
     protected Object doCreateBean(String beanName, BeanDefinition mbd, Object[] args) throws BeansException {
         Object bean = instantiateBean(beanName, mbd, args);
         Object exposedObject = bean;
-        populateBean(beanName, mbd);
+        populateBean(beanName, mbd, exposedObject);
         exposedObject = initializeBean(exposedObject, beanName);
         return exposedObject;
     }
@@ -38,9 +38,9 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         }
     }
 
-    private void populateBean(String beanName, BeanDefinition mbd) throws BeansException {
+    private void populateBean(String beanName, BeanDefinition mbd, Object exposedObject) throws BeansException {
         PropertyValues pvs = mbd.getPropertyValues();
-        applyPropertyValues(beanName, mbd, pvs);
+        applyPropertyValues(beanName, mbd, exposedObject, pvs);
     }
 
     public Object initializeBean(Object existingBean, String beanName) {
@@ -105,7 +105,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
     }
 
 
-    protected void applyPropertyValues(Object bean, BeanDefinition mbd, PropertyValues pvs) throws BeansException {
+    protected void applyPropertyValues(String beanName, BeanDefinition mbd, Object bean, PropertyValues pvs) throws BeansException {
         for (PropertyValue propertyValue : pvs.getPropertyValues()) {
             Object value = propertyValue.getValue();
             if (value instanceof BeanReference) {

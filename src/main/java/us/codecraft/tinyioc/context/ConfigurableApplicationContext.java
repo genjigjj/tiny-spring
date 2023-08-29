@@ -1,12 +1,12 @@
 package us.codecraft.tinyioc.context;
 
-import us.codecraft.tinyioc.beans.factory.DefaultListableBeanFactory;
+import us.codecraft.tinyioc.beans.factory.config.ConfigurableListableBeanFactory;
 
 public interface ConfigurableApplicationContext extends ApplicationContext {
 
-    void refresh() throws Exception;
+    void refresh();
 
     void close();
 
-    DefaultListableBeanFactory getBeanFactory();
+    ConfigurableListableBeanFactory getBeanFactory();
 }
