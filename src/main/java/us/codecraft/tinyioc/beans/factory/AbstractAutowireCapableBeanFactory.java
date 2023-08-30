@@ -1,8 +1,8 @@
 package us.codecraft.tinyioc.beans.factory;
 
 import us.codecraft.tinyioc.BeanReference;
-import us.codecraft.tinyioc.aop.BeanFactoryAware;
 import us.codecraft.tinyioc.beans.*;
+import us.codecraft.tinyioc.beans.factory.config.SmartInstantiationAwareBeanPostProcessor;
 import us.codecraft.tinyioc.beans.factory.support.AutowireCapableBeanFactory;
 
 import java.lang.reflect.Field;
@@ -47,6 +47,14 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
     private Object getEarlyBeanReference(String beanName, BeanDefinition mbd, Object bean) {
         Object exposedObject = bean;
+        if (!mbd.isSynthetic() && hasInstantiationAwareBeanPostProcessors()) {
+            for (BeanPostProcessor bp : getBeanPostProcessors()) {
+                if (bp instanceof SmartInstantiationAwareBeanPostProcessor) {
+                    SmartInstantiationAwareBeanPostProcessor ibp = (SmartInstantiationAwareBeanPostProcessor) bp;
+                    exposedObject = ibp.getEarlyBeanReference(exposedObject, beanName);
+                }
+            }
+        }
         return exposedObject;
     }
 

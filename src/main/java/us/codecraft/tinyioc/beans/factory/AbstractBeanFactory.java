@@ -5,6 +5,7 @@ import us.codecraft.tinyioc.beans.BeanDefinition;
 import us.codecraft.tinyioc.beans.BeanPostProcessor;
 import us.codecraft.tinyioc.beans.BeansException;
 import us.codecraft.tinyioc.beans.factory.config.ConfigurableBeanFactory;
+import us.codecraft.tinyioc.beans.factory.config.InstantiationAwareBeanPostProcessor;
 import us.codecraft.tinyioc.beans.factory.support.DefaultSingletonBeanRegistry;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.List;
  */
 public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry implements ConfigurableBeanFactory {
 
+	private volatile boolean hasInstantiationAwareBeanPostProcessors;
 
 	private List<BeanPostProcessor> beanPostProcessors = new ArrayList<>();
 
@@ -57,8 +59,16 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
 
 
 	public void addBeanPostProcessor(BeanPostProcessor beanPostProcessor) {
+		// Remove from old position, if any
+		this.beanPostProcessors.remove(beanPostProcessor);
+		if (beanPostProcessor instanceof InstantiationAwareBeanPostProcessor) {
+			this.hasInstantiationAwareBeanPostProcessors = true;
+		}
 		this.beanPostProcessors.add(beanPostProcessor);
 	}
 
+	protected boolean hasInstantiationAwareBeanPostProcessors() {
+		return this.hasInstantiationAwareBeanPostProcessors;
+	}
 
 }

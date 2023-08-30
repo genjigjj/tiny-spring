@@ -4,6 +4,7 @@ import org.aopalliance.intercept.MethodInterceptor;
 import us.codecraft.tinyioc.beans.BeanPostProcessor;
 import us.codecraft.tinyioc.beans.factory.AbstractBeanFactory;
 import us.codecraft.tinyioc.beans.factory.BeanFactory;
+import us.codecraft.tinyioc.beans.factory.BeanFactoryAware;
 
 /**
  * @author yihua.huang@dianping.com

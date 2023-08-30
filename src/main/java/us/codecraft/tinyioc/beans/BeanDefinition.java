@@ -20,6 +20,8 @@ public class BeanDefinition {
 
 	private String beanClassName;
 
+	private boolean synthetic = false;
+
 	private PropertyValues propertyValues = new PropertyValues();
 
 	public BeanDefinition() {
@@ -60,5 +62,9 @@ public class BeanDefinition {
 
 	public boolean isPrototype() {
 		return SCOPE_PROTOTYPE.equals(this.scope);
+	}
+
+	public boolean isSynthetic() {
+		return synthetic;
 	}
 }
