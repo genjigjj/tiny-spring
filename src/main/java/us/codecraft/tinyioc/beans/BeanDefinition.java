@@ -1,5 +1,7 @@
 package us.codecraft.tinyioc.beans;
 
+import us.codecraft.tinyioc.beans.factory.config.ConfigurableBeanFactory;
+
 /**
  * bean的内容及元数据，保存在BeanFactory中，包装bean的实体
  * 
@@ -7,10 +9,10 @@ package us.codecraft.tinyioc.beans;
  */
 public class BeanDefinition {
 
-	private static final String SCOPE_SINGLETON = "singleton";
+	private static final String SCOPE_SINGLETON = ConfigurableBeanFactory.SCOPE_SINGLETON;
 
 	private static final String SCOPE_DEFAULT = "";
-	private static final String SCOPE_PROTOTYPE = "prototype";
+	private static final String SCOPE_PROTOTYPE = ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
 	private String scope = SCOPE_DEFAULT;
 

@@ -10,6 +10,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * Spring 的 {@link ConfigurableListableBeanFactory} 和 {@link BeanDefinitionRegistry} 接口的默认实现：
+ * 基于 bean 定义元数据的成熟 bean 工厂，可通过后处理器进行扩展。
+ */
 public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFactory implements BeanDefinitionRegistry, ConfigurableListableBeanFactory {
 
     private final Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<>(256);
@@ -36,6 +40,11 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
         for (String beanName : beanDefinitionNames) {
             getBean(beanName);
         }
+    }
+
+    @Override
+    public String[] getBeanDefinitionNames() {
+        return beanDefinitionNames.toArray(new String[0]);
     }
 
     @Override
