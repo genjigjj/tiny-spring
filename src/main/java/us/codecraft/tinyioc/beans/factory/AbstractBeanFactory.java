@@ -1,6 +1,5 @@
 package us.codecraft.tinyioc.beans.factory;
 
-import com.sun.istack.internal.Nullable;
 import us.codecraft.tinyioc.beans.BeanDefinition;
 import us.codecraft.tinyioc.beans.BeanPostProcessor;
 import us.codecraft.tinyioc.beans.BeansException;
@@ -21,12 +20,17 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
 	private List<BeanPostProcessor> beanPostProcessors = new ArrayList<>();
 
 	@Override
+	public <T> T getBean(String name,  Class<T> requiredType) throws BeansException {
+		return doGetBean(name, requiredType, null);
+	}
+
+	@Override
 	public Object getBean(String name) throws BeansException {
 		return doGetBean(name, null, null);
 	}
 
-	protected <T> T doGetBean(final String name, @Nullable final Class<T> requiredType,
-							  @Nullable final Object[] args) throws BeansException {
+	protected <T> T doGetBean(final String name,  final Class<T> requiredType,
+							   final Object[] args) throws BeansException {
 		Object bean;
 		Object sharedInstance = getSingleton(name);
 
@@ -46,7 +50,7 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
 		return (T) bean;
 	}
 
-	protected abstract Object createBean(String beanName, BeanDefinition mbd, @Nullable Object[] args) throws BeansException;
+	protected abstract Object createBean(String beanName, BeanDefinition mbd,  Object[] args) throws BeansException;
 
 
 	public List<BeanPostProcessor> getBeanPostProcessors() {

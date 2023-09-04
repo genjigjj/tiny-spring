@@ -5,5 +5,7 @@ package us.codecraft.tinyioc.aop;
  */
 public interface ClassFilter {
 
-    boolean matches(Class targetClass);
+    ClassFilter TRUE = TrueClassFilter.INSTANCE;
+
+    boolean matches(Class<?> targetClass);
 }

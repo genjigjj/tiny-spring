@@ -1,5 +1,6 @@
 package us.codecraft.tinyioc.beans.factory;
 
+import us.codecraft.tinyioc.beans.BeansException;
 import us.codecraft.tinyioc.beans.factory.config.ConfigurableBeanFactory;
 
 /**
@@ -10,5 +11,7 @@ import us.codecraft.tinyioc.beans.factory.config.ConfigurableBeanFactory;
 public interface BeanFactory {
 
     Object getBean(String name);
+
+    <T> T getBean(String name, Class<T> requiredType) throws BeansException;
 
 }

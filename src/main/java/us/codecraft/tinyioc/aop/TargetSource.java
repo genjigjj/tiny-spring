@@ -18,6 +18,11 @@ public class TargetSource {
         this.interfaces = interfaces;
 	}
 
+	public TargetSource(Object target) {
+		this.target = target;
+		this.targetClass = target.getClass();
+	}
+
 	public Class<?> getTargetClass() {
 		return targetClass;
 	}

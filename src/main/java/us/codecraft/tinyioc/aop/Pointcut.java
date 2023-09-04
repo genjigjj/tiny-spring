@@ -11,4 +11,6 @@ public interface Pointcut {
 
     MethodMatcher getMethodMatcher();
 
+    Pointcut TRUE = TruePointcut.INSTANCE;
+
 }

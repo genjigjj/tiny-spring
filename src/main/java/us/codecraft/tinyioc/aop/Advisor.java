@@ -14,6 +14,8 @@ import org.aopalliance.aop.Advice;
  */
 public interface Advisor {
 
+    Advice EMPTY_ADVICE = new Advice() {};
+
     /**
      * 在 Spring 中，"Advice" 是指切面（Aspect）中的方法或逻辑，它用于在特定的切点（Join Point）前后执行一些操作
      * @return Advice 通知
