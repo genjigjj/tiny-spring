@@ -5,6 +5,7 @@ import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
 import java.lang.reflect.Method;
+import java.util.List;
 
 /**
  * @author yihua.huang@dianping.com
@@ -29,20 +30,20 @@ public class Cglib2AopProxy extends AbstractAopProxy {
 
 		private AdvisedSupport advised;
 
-		private org.aopalliance.intercept.MethodInterceptor delegateMethodInterceptor;
 
 		private DynamicAdvisedInterceptor(AdvisedSupport advised) {
 			this.advised = advised;
-			this.delegateMethodInterceptor = advised.getMethodInterceptor();
 		}
 
 		@Override
 		public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
-			if (advised.getMethodMatcher() == null
-					|| advised.getMethodMatcher().matches(method, advised.getTargetSource().getTargetClass())) {
-				return delegateMethodInterceptor.invoke(new CglibMethodInvocation(advised.getTargetSource().getTarget(), method, args, proxy));
+			Object target = advised.getTargetSource().getTarget();
+			List<Object> chain = this.advised.getInterceptorsAndDynamicInterceptionAdvice(method, target.getClass());
+			if (chain == null || chain.isEmpty()) {
+				return proxy.invoke(target, args);
+			} else {
+				return new CglibMethodInvocation(target, method, args, chain, proxy).proceed();
 			}
-			return new CglibMethodInvocation(advised.getTargetSource().getTarget(), method, args, proxy).proceed();
 		}
 	}
 
@@ -50,15 +51,12 @@ public class Cglib2AopProxy extends AbstractAopProxy {
 
 		private final MethodProxy methodProxy;
 
-		public CglibMethodInvocation(Object target, Method method, Object[] args, MethodProxy methodProxy) {
-			super(target, method, args);
+
+		public CglibMethodInvocation(Object target, Method method, Object[] args, List<Object> interceptorsAndDynamicMethodMatchers, MethodProxy methodProxy) {
+			super(target, method, args, interceptorsAndDynamicMethodMatchers);
 			this.methodProxy = methodProxy;
 		}
 
-		@Override
-		public Object proceed() throws Throwable {
-			return this.methodProxy.invoke(this.target, this.arguments);
-		}
 	}
 
 }

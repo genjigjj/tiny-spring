@@ -28,7 +28,7 @@ public class JdkDynamicAopProxy extends AbstractAopProxy implements InvocationHa
 		if (advised.getMethodMatcher() != null
 				&& advised.getMethodMatcher().matches(method, advised.getTargetSource().getTarget().getClass())) {
 			return methodInterceptor.invoke(new ReflectiveMethodInvocation(advised.getTargetSource().getTarget(),
-					method, args));
+					method, args, null));
 		} else {
 			return method.invoke(advised.getTargetSource().getTarget(), args);
 		}
