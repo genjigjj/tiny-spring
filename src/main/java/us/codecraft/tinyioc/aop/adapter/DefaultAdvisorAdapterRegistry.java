@@ -66,6 +66,6 @@ public class DefaultAdvisorAdapterRegistry implements AdvisorAdapterRegistry{
 
     @Override
     public void registerAdvisorAdapter(AdvisorAdapter adapter) {
-
+        this.adapters.add(adapter);
     }
 }

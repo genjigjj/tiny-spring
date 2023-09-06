@@ -8,8 +8,9 @@ public class OutputServiceImpl implements OutputService {
     private HelloWorldService helloWorldService;
 
     @Override
-    public void output(String text){
-        System.out.println(text);
+    public String output(String text){
+        System.out.println("output invoke");
+        return text;
     }
 
     public void setHelloWorldService(HelloWorldService helloWorldService) {

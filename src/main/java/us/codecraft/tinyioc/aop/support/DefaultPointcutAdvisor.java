@@ -12,7 +12,7 @@ import us.codecraft.tinyioc.aop.Pointcut;
  **/
 public class DefaultPointcutAdvisor extends AbstractGenericPointcutAdvisor {
 
-    private Pointcut pointcut = Pointcut.TRUE;
+    private Pointcut pointcut;
 
     public DefaultPointcutAdvisor(Advice advice) {
         this(Pointcut.TRUE, advice);

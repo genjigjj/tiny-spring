@@ -11,7 +11,13 @@ public class HelloWorldServiceImpl implements HelloWorldService {
 
     @Override
     public void helloWorld(){
+        System.out.println("helloWorld invoke");
         outputService.output(text);
+    }
+
+    @Override
+    public void throwEx() throws Exception {
+        throw new Exception("test");
     }
 
     public void setText(String text) {

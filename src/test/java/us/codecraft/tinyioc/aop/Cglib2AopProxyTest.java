@@ -40,4 +40,20 @@ public class Cglib2AopProxyTest {
 		// 4. 基于AOP的调用
 		helloWorldServiceProxy.helloWorld();
 	}
+
+	@Test
+	public void testAdvice() throws Exception {
+		ApplicationContext applicationContext = new ClassPathXmlApplicationContext("tinyioc-advice.xml");
+		HelloWorldService helloWorldService = (HelloWorldService) applicationContext.getBean("helloWorldService");
+		helloWorldService.helloWorld();
+
+	}
+
+	@Test
+	public void testThrowAdvice() throws Exception {
+		ApplicationContext applicationContext = new ClassPathXmlApplicationContext("tinyioc-advice.xml");
+		HelloWorldService helloWorldService = (HelloWorldService) applicationContext.getBean("helloWorldService");
+		helloWorldService.throwEx();
+
+	}
 }
