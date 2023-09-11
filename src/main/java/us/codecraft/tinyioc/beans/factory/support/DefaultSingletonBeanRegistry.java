@@ -152,4 +152,9 @@ public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry {
     public boolean isSingletonCurrentlyInCreation(String beanName) {
         return this.singletonsCurrentlyInCreation.contains(beanName);
     }
+
+    @Override
+    public boolean containsSingleton(String beanName) {
+        return this.singletonObjects.containsKey(beanName);
+    }
 }

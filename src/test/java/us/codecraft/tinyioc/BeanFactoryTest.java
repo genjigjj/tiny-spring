@@ -41,4 +41,22 @@ public class BeanFactoryTest {
 		HelloWorldService helloWorldService = (HelloWorldService) beanFactory.getBean("helloWorldService");
 		helloWorldService.helloWorld();
 	}
+
+    @Test
+    public void testFactoryBean() throws Exception {
+
+        // 1、初始化BeanFactory并注册bean
+        DefaultListableBeanFactory beanFactory = new DefaultListableBeanFactory();
+
+        // 2.读取配置
+        XmlBeanDefinitionReader xmlBeanDefinitionReader = new XmlBeanDefinitionReader(beanFactory);
+        xmlBeanDefinitionReader.loadBeanDefinitions("tinyioc-factory.xml");
+        // 3.获取bean
+        TestServiceImpl testService = (TestServiceImpl) beanFactory.getBean("testFactoryBean");
+        testService.test();
+
+        TestFactoryBean testFactoryBean = (TestFactoryBean) beanFactory.getBean("&testFactoryBean");
+        System.out.println(testFactoryBean);
+
+    }
 }

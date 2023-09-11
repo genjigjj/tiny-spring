@@ -38,8 +38,22 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
     @Override
     public void preInstantiateSingletons() {
         for (String beanName : beanDefinitionNames) {
-            getBean(beanName);
+            if (isFactoryBean(beanName)) {
+
+            } else {
+                getBean(beanName);
+            }
         }
+    }
+
+    @Override
+    public boolean isFactoryBean(String name) {
+        Object beanInstance = getSingleton(name, false);
+        if (beanInstance != null) {
+            return (beanInstance instanceof FactoryBean);
+        }
+        BeanDefinition beanDefinition = getBeanDefinition(name);
+        return beanDefinition.getBeanClass().isAssignableFrom(FactoryBean.class);
     }
 
     @Override

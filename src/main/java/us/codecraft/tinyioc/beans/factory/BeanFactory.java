@@ -10,6 +10,8 @@ import us.codecraft.tinyioc.beans.factory.config.ConfigurableBeanFactory;
  */
 public interface BeanFactory {
 
+    String FACTORY_BEAN_PREFIX = "&";
+
     Object getBean(String name);
 
     <T> T getBean(String name, Class<T> requiredType) throws BeansException;

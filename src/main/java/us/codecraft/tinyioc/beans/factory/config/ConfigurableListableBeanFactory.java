@@ -13,4 +13,6 @@ public interface ConfigurableListableBeanFactory extends ListableBeanFactory, Au
 
     void preInstantiateSingletons();
 
+    boolean isFactoryBean(String name);
+
 }

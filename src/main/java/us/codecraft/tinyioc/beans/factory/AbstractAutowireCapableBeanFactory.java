@@ -160,5 +160,9 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         }
     }
 
+    @Override
+    protected Object postProcessObjectFromFactoryBean(Object object, String beanName) {
+        return applyBeanPostProcessorsAfterInitialization(object, beanName);
+    }
 
 }
